@@ -1,8 +1,8 @@
 import numpy as np
 import os
 
-TRIES = 10
-LEN = int(input("Enter the length of the word: "))
+TRIES = 6
+LEN = int(input("\nInserisci la lunghezza della parola: "))
 fname = "4mln_no_ax_length%i"%LEN
 words = np.load(os.getcwd()+"\\Personal\\PYTHON\\Hangman\\processed_data\\%s.npy"%fname)
 probs = { 
@@ -40,13 +40,13 @@ def reduce(words, letter, positions):
     else:
         for pos in positions:
             words = [wrd for wrd in words if wrd[pos] == letter]
+        words = [wrd for wrd in words if wrd.count(letter) == len(positions)]
 
     return words
 
 def recalculate_probs(words, probs):
+    # Compute the frequency of each letter contained in probs relatively to words.
     n_words = len(words)
-
-    #probs = { k: 0 for k in string.ascii_lowercase }
     for key in probs:
         probs[key] = 0
 
@@ -74,11 +74,17 @@ def recalculate_probs(words, probs):
 ###
 # true word = d  i  s  s  i  m  i  l  a  n  d  o  v  i  s  i
 # positions = 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15
+###
+# true word = a r t i s t i c o
+# positions = 0 1 2 3 4 5 6 7 8
+
+probs = recalculate_probs(words, probs)
+
 while TRIES > 0:
     letter = max(probs, key=probs.get)
     try:
         pos = None
-        pos = input("Se la lettera \"%s\" è contenuta nella tua parola, dimmi in che posizioni (partendo da 0), altrimenti premi invio: "%letter).split(' ')
+        pos = input("\n Se la lettera \"%s\" è contenuta nella tua parola, dimmi in che posizioni (partendo da 0), altrimenti premi invio: "%letter).split(' ')
         pos = list(map(int,pos))
     except ValueError:
         pos = None
@@ -98,7 +104,7 @@ while TRIES > 0:
     
     probs = recalculate_probs(words, probs)
 
-    print("Mi rimangono %i parole!"%n_words)
+    print("\nMi rimangono %i parole!"%n_words)
 
 
 
