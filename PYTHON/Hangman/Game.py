@@ -3,7 +3,7 @@ import os
 
 TRIES = 6
 LEN = int(input("\nInserisci la lunghezza della parola: "))
-fname = "4mln_no_ax_length%i"%LEN
+fname = "4mln_ax_length%i"%LEN
 words = np.load(os.getcwd()+"\\Personal\\PYTHON\\Hangman\\processed_data\\%s.npy"%fname)
 probs = { 
     "a": 11.74,
@@ -31,7 +31,12 @@ probs = {
     #"x": ,
     #"y": ,
     #"w": ,
-    "z": 0.49     
+    "z": 0.49,
+    "à": 0,
+    "è": 0,
+    "ì": 0,
+    "ò": 0,
+    "ù": 0     
     }	
 
 def reduce(words, letter, positions):
@@ -80,6 +85,8 @@ def recalculate_probs(words, probs):
 
 probs = recalculate_probs(words, probs)
 
+suggested_word = "_"*LEN
+
 while TRIES > 0:
     letter = max(probs, key=probs.get)
     try:
@@ -105,6 +112,10 @@ while TRIES > 0:
     probs = recalculate_probs(words, probs)
 
     print("\nMi rimangono %i parole!"%n_words)
+    if pos is not None:
+        for p in pos:
+            suggested_word = suggested_word[:p] + letter + suggested_word[p + 1:]
+    print("\n%s\n"%suggested_word)
 
 
 
