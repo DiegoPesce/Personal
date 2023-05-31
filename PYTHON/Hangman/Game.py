@@ -36,7 +36,8 @@ probs = {
     "è": 0,
     "ì": 0,
     "ò": 0,
-    "ù": 0     
+    "ù": 0,
+    "é": 0   
     }	
 
 def reduce(words, letter, positions):
